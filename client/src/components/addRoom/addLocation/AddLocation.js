@@ -20,7 +20,7 @@ const AddLocation = () => {
 
   useEffect(() => {
     if (!lng && !lat) {
-      fetch('https://ipapi.co/json')
+      fetch('https://ipapi.com/json')
         .then((response) => {
           return response.json();
         })
