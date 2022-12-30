@@ -1,45 +1,60 @@
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'OPEN_LOGIN':
+    case "OPEN_LOGIN":
       return { ...state, openLogin: true };
-    case 'CLOSE_LOGIN':
+    case "CLOSE_LOGIN":
       return { ...state, openLogin: false };
 
-    case 'START_LOADING':
+    case "START_LOADING":
       return { ...state, loading: true };
-    case 'END_LOADING':
+    case "END_LOADING":
       return { ...state, loading: false };
 
-    case 'UPDATE_ALERT':
+    case "UPDATE_ALERT":
       return { ...state, alert: action.payload };
 
-     case 'UPDATE_PROFILE':
-       return { ...state, profile: action.payload };
+    case "UPDATE_PROFILE":
+      return { ...state, profile: action.payload };
 
-    case 'UPDATE_USER':
-        localStorage.setItem('currentUser', JSON.stringify(action.payload));
+    case "UPDATE_USER":
+      localStorage.setItem("currentUser", JSON.stringify(action.payload));
       return { ...state, currentUser: action.payload };
 
-    case 'UPDATE_IMAGES':
-      return { ...state, images: [...state.images, action.payload] };
-     case 'DELETE_IMAGE':
-       return {
-         ...state,
-         images: state.images.filter((image) => image !== action.payload),
-       };
-    case 'UPDATE_DETAILS':
+    case "UPDATE_IMAGES":
+      return { ...state, images: [...state.images, ...action.payload] };
+    case "DELETE_IMAGE":
+      return {
+        ...state,
+        images: state.images.filter((image) => image !== action.payload),
+      };
+    case "UPDATE_DETAILS":
       return { ...state, details: { ...state.details, ...action.payload } };
-    case 'UPDATE_LOCATION':
+    case "UPDATE_LOCATION":
       return { ...state, location: action.payload };
-    case 'RESET_ROOM':
+    case "UPDATE_UPDATED_ROOM":
+      return { ...state, updatedRoom: action.payload };
+    case "UPDATE_DELETED_IMAGES":
+      return {
+        ...state,
+        deletedImages: [...state.deletedImages, ...action.payload],
+      };
+    case "UPDATE_ADDED_IMAGES":
+      return {
+        ...state,
+        addedImages: [...state.addedImages, ...action.payload],
+      };
+    case "RESET_ROOM":
       return {
         ...state,
         images: [],
-        details: { title: '', description: '', price: 0 },
+        details: { title: "", description: "", price: 0, roll: "", studentName: "" },
         location: { lng: 0, lat: 0 },
+        updatedRoom: null,
+        deletedImages: [],
+        addedImages: [],
       };
 
-    case 'UPDATE_ROOMS':
+    case "UPDATE_ROOMS":
       return {
         ...state,
         rooms: action.payload,
@@ -47,27 +62,19 @@ const reducer = (state, action) => {
         priceFilter: 50,
         filteredRooms: action.payload,
       };
-    case 'FILTER_PRICE':
+    case "FILTER_PRICE":
       return {
         ...state,
         priceFilter: action.payload,
-        filteredRooms: applyFilter(
-          state.rooms,
-          state.addressFilter,
-          action.payload
-        ),
+        filteredRooms: applyFilter(state.rooms, state.addressFilter, action.payload),
       };
-    case 'FILTER_ADDRESS':
+    case "FILTER_ADDRESS":
       return {
         ...state,
         addressFilter: action.payload,
-        filteredRooms: applyFilter(
-          state.rooms,
-          action.payload,
-          state.priceFilter
-        ),
+        filteredRooms: applyFilter(state.rooms, action.payload, state.priceFilter),
       };
-    case 'CLEAR_ADDRESS':
+    case "CLEAR_ADDRESS":
       return {
         ...state,
         addressFilter: null,
@@ -75,19 +82,20 @@ const reducer = (state, action) => {
         filteredRooms: state.rooms,
       };
 
-    case 'UPDATE_ROOM':
+    case "UPDATE_ROOM":
       return { ...state, room: action.payload };
 
-    case 'UPDATE_USERS':
+    case "UPDATE_USERS":
       return { ...state, users: action.payload };
-    case 'DELETE_ROOM':
+    case "DELETE_ROOM":
       return {
         ...state,
         rooms: state.rooms.filter((room) => room._id !== action.payload),
       };
-
+    case "UPDATE_SECTION":
+      return { ...state, section: action.payload };
     default:
-      throw new Error('No matched action!');
+      throw new Error("No matched action!");
   }
 };
 

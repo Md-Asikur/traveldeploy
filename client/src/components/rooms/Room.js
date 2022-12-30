@@ -66,11 +66,11 @@ const Room = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container sx={{ pt: 5 }}>
+      <Container sx={{ pt: 2 }}>
         <Swiper
           modules={[Navigation, Autoplay, EffectCoverflow, Lazy, Zoom]}
           centeredSlides
-          slidesPerView={2}
+          slidesPerView={4}
           grabCursor
           navigation
           autoplay
@@ -88,7 +88,7 @@ const Room = () => {
           {room?.images?.map((url) => (
             <SwiperSlide key={url}>
               <div className="swiper-zoom-container">
-                <img src={url} alt="room" />
+                <img src={url} alt="room" style={{height:"100vh",width:"100%"}} />
               </div>
             </SwiperSlide>
           ))}
@@ -104,7 +104,7 @@ const Room = () => {
             <Avatar src={room?.uPhoto} />
           </Tooltip>
         </Swiper>
-        <Stack sx={{ p: 3 }} spacing={2}>
+        <Stack sx={{ p: 1 }} spacing={2}>
           <Stack
             direction="row"
             sx={{

@@ -1,4 +1,4 @@
-import { Send } from '@mui/icons-material';
+import { Send,Cancel } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -13,13 +13,21 @@ import { useValue } from '../../context/ContextProvider';
 import AddDetails from './addDetails/AddDetails';
 import AddImages from './addImages/AddImages';
 import AddLocation from './addLocation/AddLocation';
-import { createRoom } from '../../actions/room';
-
-const AddRoom = ({ setPage }) => {
+import { createRoom,clearRoom,updateRoom } from '../../actions/room';
+import { useNavigate } from "react-router-dom";
+const AddRoom = ( ) => {
   const {
-    state: { images, details, location, currentUser },
+    state: {
+      images,
+      details,
+      location,
+      currentUser,
+      updatedRoom,deletedImages,
+      addedImages,
+    },
     dispatch,
   } = useValue();
+  
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState([
     { label: 'Location', completed: false },
@@ -91,21 +99,26 @@ const AddRoom = ({ setPage }) => {
       description: details.description,
       images,
     };
-    createRoom(room, currentUser, dispatch, setPage);
+    if (updatedRoom)
+      return updateRoom(room, currentUser, dispatch, updatedRoom, deletedImages);
+    createRoom(room, currentUser, dispatch);
+  };
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    if (updatedRoom) {
+      navigate("/dashboard/rooms");
+      clearRoom(dispatch, currentUser, addedImages, updatedRoom);
+    } else {
+      dispatch({ type: "UPDATE_SECTION", payload: 0 });
+      clearRoom(dispatch, currentUser, images);
+    }
   };
   return (
     <Container sx={{ my: 4 }}>
-      <Stepper
-        alternativeLabel
-        nonLinear
-        activeStep={activeStep}
-        sx={{ mb: 3 }}
-      >
+      <Stepper alternativeLabel nonLinear activeStep={activeStep} sx={{ mb: 3 }}>
         {steps.map((step, index) => (
           <Step key={step.label} completed={step.completed}>
-            <StepButton onClick={() => setActiveStep(index)}>
-              {step.label}
-            </StepButton>
+            <StepButton onClick={() => setActiveStep(index)}>{step.label}</StepButton>
           </Step>
         ))}
       </Stepper>
@@ -118,7 +131,7 @@ const AddRoom = ({ setPage }) => {
           }[activeStep]
         }
 
-        <Stack direction="row" sx={{ pt: 2, justifyContent: 'space-around' }}>
+        <Stack direction="row" sx={{ pt: 2, justifyContent: "space-around" }}>
           <Button
             color="inherit"
             disabled={!activeStep}
@@ -131,16 +144,13 @@ const AddRoom = ({ setPage }) => {
           </Button>
         </Stack>
         {showSubmit && (
-          <Stack sx={{ alignItems: 'center' }}>
-            <Button
-              variant="contained"
-              endIcon={<Send />}
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-          </Stack>
+          <Button variant="contained" endIcon={<Send />} onClick={handleSubmit}>
+            {updatedRoom ? "Update" : "Submit"}
+          </Button>
         )}
+        <Button variant="outlined" endIcon={<Cancel />} onClick={handleCancel}>
+          Cancel
+        </Button>
       </Box>
     </Container>
   );

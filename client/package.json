@@ -15,7 +15,7 @@
     "axios": "^1.2.0",
     "dotenv": "^16.0.3",
     "dropzone": "^6.0.0-beta.2",
-    "firebase": "^9.14.0",
+    "firebase": "^9.15.0",
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "^2.11.0",
     "moment": "^2.29.4",
@@ -46,6 +46,4 @@
     "defaults",
     "not ie 11"
   ]
-   
-
 }

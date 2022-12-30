@@ -24,7 +24,7 @@ const ProgressItem = ({ file }) => {
           setProgress
         );
 
-        dispatch({ type: 'UPDATE_IMAGES', payload: url });
+        dispatch({ type: 'UPDATE_IMAGES', payload: [url] });
         setImageURL(null);
       } catch (error) {
         dispatch({

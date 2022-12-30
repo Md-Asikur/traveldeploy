@@ -12,6 +12,8 @@ import { Brightness4, Brightness7, Home, Menu } from '@mui/icons-material';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SideList from './SideList';
+import Protected from '../../components/protected/Protected';
+import Login from '../../components/user/Login';
 
 const drawerWidth = 240;
 
@@ -54,7 +56,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   return (
     <ThemeProvider theme={darkTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
           <Toolbar>
@@ -65,22 +67,17 @@ export default function Dashboard() {
               edge="start"
               sx={{
                 marginRight: 5,
-                ...(open && { display: 'none' }),
+                ...(open && { display: "none" }),
               }}
             >
               <Menu />
             </IconButton>
             <Tooltip title="Go back to home page">
-              <IconButton sx={{ mr: 1 }} onClick={() => navigate('/')}>
+              <IconButton sx={{ mr: 1 }} onClick={() => navigate("/")}>
                 <Home />
               </IconButton>
             </Tooltip>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1 }}
-            >
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               Dashboard
             </Typography>
             <IconButton onClick={() => setDark(!dark)}>
@@ -88,8 +85,11 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <SideList {...{ open, setOpen }} />
+        <Protected>
+          <SideList {...{ open, setOpen }} />
+        </Protected>
       </Box>
+      <Login/>
     </ThemeProvider>
   );
 }
